@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 // Set up the urlEntry schema
-var urlSchema = mongoose.Schema({
+var urlEntrySchema = mongoose.Schema({
     original: String,
     shortCode: {
         type: Number,

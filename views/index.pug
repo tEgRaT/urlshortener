@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    title URL Shortener
+    link(rel="stylesheet", href="/stylesheets/style.css")
+  body
+    h1 tEgRaT's URL Shortener Microservice
+    blockquote User Stories:
+      ul
+        li I can pass an URL as a parameter and I will receive a shortened URL in the JSON response.
+        li When I visit that shortened URL, it will redirect me to my original link.
+    h2 Example creation usage:
+    code https://tegraturlshortener.herokuapp.com/new/https://www.google.com
+    br
+    code https://tegraturlshortener.herokuapp.com/new/http://freecodecamp.com
+    p If you want to pass a site that doesn't exist (or an invalid url) for some reason you can do:
+    code https://tegraturlshortener.herokuapp.com/new/invalid?allow=true
+    h2 Example creation output:
+    code { "original_url": "http://freecodecamp.com", "short_url": "https://tegraturlshortener.herokuapp.com/1"}
+    h2 Usage:
+    code https://tegraturlshortener.herokuapp.com/1
+    h2 Will redirect to:
+    code http://freecodecamp.com

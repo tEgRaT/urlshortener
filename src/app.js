@@ -1,4 +1,5 @@
 import express from 'express'
+import path from 'path'
 import mongoose from 'mongoose' // Import mongoose
 
 import { UrlEntry } from './urlEntry'
@@ -6,6 +7,11 @@ import { createFullUrl, isValidUrl } from './url-utils'
 import { getShortCode, isDuplicate, insertNew } from './mongo-utils'
 
 export const app = express()
+
+// view engine setup
+app.set('views', path.join(__dirname, '../views'))
+app.set('view engine', 'pug')
+app.use(express.static(path.join(__dirname, '../public')))
 
 // Use NodeJS promises instead of built in ones
 // We only do this because the promise library
@@ -15,9 +21,13 @@ mongoose.Promise = global.Promise
 // Connect to your MongoDB instance and chosen collection
 mongoose.connect('mongodb://localhost:27017/urlShortener')
 
+app.get('/', (req, res) => {
+    res.render('index')
+})
+
 app.get('/new/*', (req, res) => {
     let url = req.params[0]
-    if (UrlValidator.isValidUrl(url)) {
+    if (isValidUrl(url)) {
         isDuplicate(url).then(shortCode => {
             if (shortCode) {
                 res.status(200).json({
@@ -31,7 +41,12 @@ app.get('/new/*', (req, res) => {
                             error: 'Unkown error' // Something failed for some reason.
                         })
                     } else {
-                        res.status(200).send(`URL successfully shortened: http://www.example.com/${insertedDocument.shortCode}`) // We return the shortened URL
+                        //res.status(200).send(`URL successfully shortened: http://www.example.com/${insertedDocument.shortCode}`) // We return the shortened URL
+                        let short_url = 'https://tegraturlshortener.herokuapp.com/' + insertedDocument.shortCode
+                        res.status(200).json({
+                            original_url: url,
+                            short_url: short_url
+                        })
                     }
                 })
             }
